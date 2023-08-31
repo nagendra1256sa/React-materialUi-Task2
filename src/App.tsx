@@ -62,7 +62,7 @@ const App:React.FC=()=>
  }
   return (
     <div>
-       <h1 style={{"textAlign":"center"}}>Menu Items</h1>
+       <h1 style={{"textAlign":"center"}}>Menu Item</h1>
      <Routes>
       <Route>
       <Route path="/muilist" element={state?<BasicTable props={state} deleteItem={deleteData} editing={handleData} />:null}>
