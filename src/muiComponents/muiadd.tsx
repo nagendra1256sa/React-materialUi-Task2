@@ -9,12 +9,11 @@ import { useNavigate } from 'react-router-dom';
 
 interface typeCheck{
     send:(data:any)=>void;
-    Form:boolean;
-    setForm:React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const FormAdd:React.FC<typeCheck>=({send,Form,setForm})=> {
+const FormAdd:React.FC<typeCheck>=({send})=> {
     const navigate=useNavigate()
+    const [errors,setErrors]=React.useState<any>({});
     const [Items,setItem]=React.useState({
         Sku:'',
         Name:"",
@@ -23,18 +22,65 @@ const FormAdd:React.FC<typeCheck>=({send,Form,setForm})=> {
         BasePrice:"",
         Decription:""
     });
+    
     const handleChange=(e:React.ChangeEvent<HTMLInputElement>)=>
     {   
         const{name,value}=e.target;
         const parsedValue=name==='Sku'||name==='SellingPrice'||name==='BasePrice'?parseFloat(value):value;
         setItem({...Items,[name]:parsedValue});
     }
+    const handleForm=()=>
+    {
+       navigate("/muilist");
+    }
+    const validOf=():boolean=>
+    {
+       const newErrors:any={};
+       if(Items.Sku==="")
+       {
+         newErrors.Sku="Sku required";
+       }
+       if(Items.Name==="")
+       {
+         newErrors.Name="Name required";
+       }
+       if(Items.DisplayName==="")
+       {
+         newErrors.DisplayName="Display name required";
+       }
+       if(Items.SellingPrice==="")
+       {
+         newErrors.SellingPrice="Selling price required";
+       }
+       if(Items.BasePrice==="")
+       {
+         newErrors.BasePrice="Base Price required";
+       }
+      
+         setErrors(newErrors);
+       return Object.keys(newErrors).length===0;
+    }
+    const handleItem=(Items:any)=>
+    {
+       if(validOf())
+       {
+          send(Items);
+          setItem({  Sku:'',
+        Name:"",
+        DisplayName:"",
+        SellingPrice:"",
+        BasePrice:"",
+        Decription:""});
+        navigate('/muilist')
+       }
+    }
   return (
     <div>
-      <Dialog  open={Form}>
+      <Dialog  open={true}  onClose={handleForm}>
         <DialogTitle>Add Item</DialogTitle>
         <DialogContent>
           <TextField
+           autoFocus
             name="Sku"
             margin="dense"
             label="Sku"
@@ -43,7 +89,8 @@ const FormAdd:React.FC<typeCheck>=({send,Form,setForm})=> {
             variant="standard"
             value={Items.Sku}
             onChange={handleChange}
-            autoFocus
+            error={!!errors.Sku}
+            helperText={errors.Sku}
           />
           <TextField
             name="Name"
@@ -54,6 +101,8 @@ const FormAdd:React.FC<typeCheck>=({send,Form,setForm})=> {
             variant="standard"
             value={Items.Name}
             onChange={handleChange}
+            error={!!errors.Name}
+            helperText={errors.Name}
           />
           <TextField
             name="DisplayName"
@@ -65,6 +114,8 @@ const FormAdd:React.FC<typeCheck>=({send,Form,setForm})=> {
             variant="standard"
             value={Items.DisplayName}
             onChange={handleChange}
+            error={!!errors.DisplayName}
+            helperText={errors.DisplayName}
           />
           <TextField
             autoFocus
@@ -76,6 +127,8 @@ const FormAdd:React.FC<typeCheck>=({send,Form,setForm})=> {
             variant="standard"
             value={Items.SellingPrice}
             onChange={handleChange}
+            error={!!errors.SellingPrice}
+            helperText={errors.SellingPrice}
           />
           <TextField
             autoFocus
@@ -87,6 +140,8 @@ const FormAdd:React.FC<typeCheck>=({send,Form,setForm})=> {
             variant="standard"
             value={Items.BasePrice}
             onChange={handleChange}
+            error={!!errors.BasePrice}
+            helperText={errors.BasePrice}
           />
           <TextField
             autoFocus
@@ -101,18 +156,13 @@ const FormAdd:React.FC<typeCheck>=({send,Form,setForm})=> {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={()=>{setForm(false);navigate('/muilist');setItem({  Sku:'',
+          <Button onClick={()=>{navigate('/muilist');setItem({  Sku:'',
         Name:"",
         DisplayName:"",
         SellingPrice:"",
         BasePrice:"",
         Decription:""})}}>Cancel</Button>
-          <Button onClick={()=>{send(Items);setItem({  Sku:'',
-        Name:"",
-        DisplayName:"",
-        SellingPrice:"",
-        BasePrice:"",
-        Decription:""})}}>Send</Button>
+          <Button onClick={()=>{handleItem(Items)}}>Send</Button>
         </DialogActions>
       </Dialog>
     </div>

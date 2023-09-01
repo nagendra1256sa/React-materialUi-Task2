@@ -5,33 +5,32 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { Delete, Edit } from '@mui/icons-material';
-import { Link, useNavigate } from 'react-router-dom';
-import { Button } from '@mui/material';
-import FormAdd from './muiadd';
+import { AddCircle, Delete, Edit } from '@mui/icons-material';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
+import {  IconButton } from '@mui/material';
 import React from 'react';
 import { Annotation } from '../App';
+import '../App.css'
 
 interface typeCheck{
   props:Annotation[];
   editing:(data:any)=>void;
   deleteItem:(id:number)=>void;
-  
+  sending:(data:any)=>void;
 }
 
-const BasicTable:React.FC<typeCheck>=({props,editing,deleteItem})=> {
-  const [form,setcloseForm]=React.useState(false);
-  const handleOpenForm=()=>
-  {
-     setcloseForm(true);
-  }
+const BasicTable:React.FC<typeCheck>=({props,editing,deleteItem,sending})=> {    
   const navigate=useNavigate();
   const handleEdit=(data:any)=>
   {
       editing(data);
       navigate("/muilist");
   }
-  return (<div>
+  const itemDetails=(Sku:number)=>
+  {
+     navigate(`/muilist/detailscard/${Sku}`);
+  }
+  return (<div className='table-size'>
        <TableContainer component={Paper}>
       <Table sx={{ minWidth: 400 }} aria-label="simple table">
         <TableHead>
@@ -47,28 +46,36 @@ const BasicTable:React.FC<typeCheck>=({props,editing,deleteItem})=> {
           {props.map((row) => (
             <TableRow
               key={row.Sku}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+              sx={{ '&:last-child td, &:last-child th': { border: 0 } }} 
+              onClick={()=>itemDetails(row.id)}
             >
               <TableCell component="th" scope="row">
                 {row.Sku}
               </TableCell>
               <TableCell align='right'>{row.Name}</TableCell>
               <TableCell align="right">{row.SellingPrice}</TableCell>
-              <TableCell align="right"><Edit onClick={()=>handleEdit(row)}/></TableCell>
-              <TableCell align="right"><Delete /></TableCell>
+              <TableCell align="right">
+                <IconButton onClick={(e)=>{handleEdit(row); navigate("/muilist/edit"); e.stopPropagation()}}>
+                  <Edit/>
+                </IconButton>
+              </TableCell>
+              <TableCell align="right">
+                <IconButton onClick={(e)=>{deleteItem(row.id);e.stopPropagation()}}>
+                 <Delete/>
+                </IconButton></TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
     </TableContainer>
-     <Link to="/muilist/add">
-     <Button variant="outlined" onClick={handleOpenForm}>
-        Add Item
-      </Button>
-     </Link>
-     <FormAdd Form={form} setForm={setcloseForm} send={function (data: Annotation): void {
-      throw new Error('Function not implemented.');
-    } }/>
+    <div style={{"textAlign":"right"}}>
+        <Link to="/muilist/add">
+          <IconButton >
+            <AddCircle style={{ fontSize: '62px'}} />
+          </IconButton>
+        </Link>
+      </div>
+      <Outlet/>
   </div>
   );
 }

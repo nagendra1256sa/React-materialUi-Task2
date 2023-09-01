@@ -1,6 +1,6 @@
 import  React,{ useEffect, useState } from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
-import DetailCard from './muiComponents/listCard';
+import DetailCard from './muiComponents/detailCard';
 import BasicTable from './muiComponents/listmui';
 import FormAdd from './muiComponents/muiadd';
 import FormEdit from './muiComponents/muiEdit';
@@ -29,6 +29,7 @@ const App:React.FC=()=>
   SellingPrice:'',
   Decription:'',
  })
+ 
  const navigate=useNavigate();
  useEffect(()=>
  {
@@ -58,19 +59,17 @@ const App:React.FC=()=>
  {
     await putData(data,data.id);
     getDetails();
-    navigate("/list");
+    navigate("/muilist");
  }
   return (
     <div>
-       <h1 style={{"textAlign":"center"}}>Menu Item</h1>
+       <h1 style={{"textAlign":"center"}}>Menu Items</h1>
      <Routes>
       <Route>
-      <Route path="/muilist" element={state?<BasicTable props={state} deleteItem={deleteData} editing={handleData} />:null}>
-      <Route path="/muilist/add" element={<FormAdd send={postData} Form={false} setForm={function (value: React.SetStateAction<boolean>): void {
-                 throw new Error('Function not implemented.');
-              } }/>}/>
-      {/* <Route path="/muilist/edit" element={<FormEdit update={updateData} editData={edit}/>}/>
-      <Route path="/muilist/listCard/:Sku" element={state?<DetailCard item={state}/>:null}/> */}
+      <Route path="/muilist" element={state?<BasicTable props={state} deleteItem={deleteData} editing={handleData} sending={postData}/>:null}>
+      <Route path="/muilist/add" element={<FormAdd send={postData}/>}/>
+      <Route path="/muilist/edit" element={<FormEdit update={updateData} editData={edit}/>}/>
+      <Route path="/muilist/detailscard/:id" element={state?<DetailCard item={state}/>:null}/>
       </Route>
       </Route>
       </Routes>
