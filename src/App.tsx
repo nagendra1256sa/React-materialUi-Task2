@@ -1,4 +1,6 @@
 import  React,{ useEffect, useState } from 'react';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import DetailCard from './muiComponents/detailCard';
 import BasicTable from './muiComponents/listmui';
@@ -40,7 +42,7 @@ const App:React.FC=()=>
     const responce=await getData();
     setState(responce.data)
  }
- const postData=async(data:any)=>
+ const postData=async(data:Annotation)=>
  {
     await post(data);
     getDetails();
@@ -66,7 +68,7 @@ const App:React.FC=()=>
        <h1 style={{"textAlign":"center"}}>Menu Items</h1>
      <Routes>
       <Route>
-      <Route path="/muilist" element={state?<BasicTable props={state} deleteItem={deleteData} editing={handleData} sending={postData}/>:null}>
+      <Route path="/muilist" element={state?<DndProvider backend={HTML5Backend}><BasicTable rows={state} deleteItem={deleteData} editing={handleData}/></DndProvider>:null}>
       <Route path="/muilist/add" element={<FormAdd send={postData}/>}/>
       <Route path="/muilist/edit" element={<FormEdit update={updateData} editData={edit}/>}/>
       <Route path="/muilist/detailscard/:id" element={state?<DetailCard item={state}/>:null}/>

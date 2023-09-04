@@ -33,6 +33,40 @@ const FormAdd:React.FC<typeCheck>=({send})=> {
     {
        navigate("/muilist");
     }
+    const validation=():boolean=>
+    {
+       const validActions:any={};
+       if(parseInt(Items.Sku)<=0)
+       {
+          validActions.Sku="Invalid inputs"
+       }
+       if(parseInt(Items.SellingPrice)<=0)
+       {
+          validActions.SellingPrice="Invalid inputs"
+       }
+       if(parseInt(Items.BasePrice)<=0)
+       {
+          validActions.BasePrice="Invalid inputs"
+       }
+       if(!isPatternValid(Items.Name))
+       {
+          validActions.Name="Invalid inputs"
+       }
+       if(!isPatternValid(Items.DisplayName))
+       {
+          validActions.DisplayName="Invalid inputs"
+       }
+       if(!isPatternValid(Items.Decription))
+       {
+          validActions.Decription="Invalid inputs"
+       }
+       if(Object.keys(validActions).length>0)
+       {
+        setErrors(validActions);
+        return false;
+       }
+       return true;
+    }
     const validOf=():boolean=>
     {
        const newErrors:any={};
@@ -56,23 +90,32 @@ const FormAdd:React.FC<typeCheck>=({send})=> {
        {
          newErrors.BasePrice="Base Price required";
        }
-      
+       if(Object.keys(newErrors).length>0)
+       {
          setErrors(newErrors);
-       return Object.keys(newErrors).length===0;
+         return false;
+       }
+       return true;
     }
     const handleItem=(Items:any)=>
     {
        if(validOf())
        {
-          send(Items);
+        if(validation())
+        {send(Items);
           setItem({  Sku:'',
         Name:"",
         DisplayName:"",
         SellingPrice:"",
         BasePrice:"",
         Decription:""});
-        navigate('/muilist')
+        navigate('/muilist')}
        }
+    }
+    const isPatternValid=(name:string):boolean=>
+    {
+      const pattern = /^[A-Za-z][A-Za-z\s]*$/;
+      return pattern.test(name);
     }
   return (
     <div>
@@ -89,7 +132,7 @@ const FormAdd:React.FC<typeCheck>=({send})=> {
             variant="standard"
             value={Items.Sku}
             onChange={handleChange}
-            error={!!errors.Sku}
+            error={errors.Sku}
             helperText={errors.Sku}
           />
           <TextField
@@ -101,7 +144,7 @@ const FormAdd:React.FC<typeCheck>=({send})=> {
             variant="standard"
             value={Items.Name}
             onChange={handleChange}
-            error={!!errors.Name}
+            error={errors.Name}
             helperText={errors.Name}
           />
           <TextField
@@ -114,7 +157,7 @@ const FormAdd:React.FC<typeCheck>=({send})=> {
             variant="standard"
             value={Items.DisplayName}
             onChange={handleChange}
-            error={!!errors.DisplayName}
+            error={errors.DisplayName}
             helperText={errors.DisplayName}
           />
           <TextField
@@ -127,7 +170,7 @@ const FormAdd:React.FC<typeCheck>=({send})=> {
             variant="standard"
             value={Items.SellingPrice}
             onChange={handleChange}
-            error={!!errors.SellingPrice}
+            error={errors.SellingPrice}
             helperText={errors.SellingPrice}
           />
           <TextField
@@ -140,7 +183,7 @@ const FormAdd:React.FC<typeCheck>=({send})=> {
             variant="standard"
             value={Items.BasePrice}
             onChange={handleChange}
-            error={!!errors.BasePrice}
+            error={errors.BasePrice}
             helperText={errors.BasePrice}
           />
           <TextField
