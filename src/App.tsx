@@ -19,7 +19,12 @@ export interface Annotation
   SellingPrice:string;
   Decription:string
 }
-
+export interface Row{
+   id:number;
+   Name:string;
+   Sku:number;
+   SellingPrice:number;
+ }
 const App:React.FC=()=>
 {
  const[state,setState]=useState<Annotation[]|undefined>();
