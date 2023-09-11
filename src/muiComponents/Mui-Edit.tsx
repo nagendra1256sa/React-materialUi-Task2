@@ -6,87 +6,57 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
-interface typeCheck{
-    send:(data:any)=>void;
+interface typeCheckEdit{
+  Sku:string;
+  Name:String;
+  DisplayName:string;
+  SellingPrice:string;
+  BasePrice:string;
+  Decription:string;
 }
 
-const FormAdd:React.FC<typeCheck>=({send})=> {
+interface typeCheck{
+    update:(data:any)=>void;
+    editData:typeCheckEdit;
+}
+
+const FormEdit:React.FC<typeCheck>=({update,editData})=> {
     const navigate=useNavigate()
-    const [errors,setErrors]=React.useState<any>({});
-    const [Items,setItem]=React.useState({
-        Sku:'',
-        Name:"",
-        DisplayName:"",
-        SellingPrice:"",
-        BasePrice:"",
-        Decription:""
-    });
-    
+    const[editingData,setEditData]=useState(editData);
+    console.log(editingData);
+    const[errors,setErrors]=useState<any>("")
     const handleChange=(e:React.ChangeEvent<HTMLInputElement>)=>
     {   
         const{name,value}=e.target;
-        const parsedValue=name==='Sku'||name==='SellingPrice'||name==='BasePrice'?parseFloat(value):value;
-        setItem({...Items,[name]:parsedValue});
+        setEditData({...editingData,[name]:value});
     }
     const handleForm=()=>
     {
-       navigate("/muilist");
-    }
-    const validation=():boolean=>
-    {
-       const validActions:any={};
-       if(parseInt(Items.Sku)<=0)
-       {
-          validActions.Sku="Invalid inputs"
-       }
-       if(parseInt(Items.SellingPrice)<=0)
-       {
-          validActions.SellingPrice="Invalid inputs"
-       }
-       if(parseInt(Items.BasePrice)<=0)
-       {
-          validActions.BasePrice="Invalid inputs"
-       }
-       if(!isPatternValid(Items.Name))
-       {
-          validActions.Name="Invalid inputs"
-       }
-       if(!isPatternValid(Items.DisplayName))
-       {
-          validActions.DisplayName="Invalid inputs"
-       }
-       if(!isPatternValid(Items.Decription))
-       {
-          validActions.Decription="Invalid inputs"
-       }
-       if(Object.keys(validActions).length>0)
-       {
-        setErrors(validActions);
-        return false;
-       }
-       return true;
+      navigate("/list");
     }
     const validOf=():boolean=>
     {
        const newErrors:any={};
-       if(Items.Sku==="")
+       if(editingData.Sku==="")
        {
-         newErrors.Sku="Sku required";
+          console.log("fdgdfg");
+          newErrors.Sku="Sku required";
        }
-       if(Items.Name==="")
+       if(editingData.Name==="")
        {
          newErrors.Name="Name required";
        }
-       if(Items.DisplayName==="")
+       if(editingData.DisplayName==="")
        {
          newErrors.DisplayName="Display name required";
        }
-       if(Items.SellingPrice==="")
+       if(editingData.SellingPrice==="")
        {
          newErrors.SellingPrice="Selling price required";
        }
-       if(Items.BasePrice==="")
+       if(editingData.BasePrice==="")
        {
          newErrors.BasePrice="Base Price required";
        }
@@ -97,40 +67,28 @@ const FormAdd:React.FC<typeCheck>=({send})=> {
        }
        return true;
     }
-    const handleItem=(Items:any)=>
+    const handleData=()=>
     {
-       if(validOf())
-       {
-        if(validation())
-        {send(Items);
-          setItem({  Sku:'',
-        Name:"",
-        DisplayName:"",
-        SellingPrice:"",
-        BasePrice:"",
-        Decription:""});
-        navigate('/muilist')}
-       }
-    }
-    const isPatternValid=(name:string):boolean=>
-    {
-      const pattern = /^[A-Za-z][A-Za-z\s]*$/;
-      return pattern.test(name);
+      if(validOf())
+      {
+        update(editingData);
+      }
+    
     }
   return (
     <div>
       <Dialog  open={true}  onClose={handleForm}>
-        <DialogTitle>Add Item</DialogTitle>
+        <DialogTitle>Edit Item</DialogTitle>
         <DialogContent>
           <TextField
-           autoFocus
+            autoFocus
             name="Sku"
             margin="dense"
             label="Sku"
             type="number"
             fullWidth
             variant="standard"
-            value={Items.Sku}
+            value={editingData.Sku}
             onChange={handleChange}
             error={errors.Sku}
             helperText={errors.Sku}
@@ -142,7 +100,7 @@ const FormAdd:React.FC<typeCheck>=({send})=> {
             type="text"
             fullWidth
             variant="standard"
-            value={Items.Name}
+            value={editingData.Name}
             onChange={handleChange}
             error={errors.Name}
             helperText={errors.Name}
@@ -155,7 +113,7 @@ const FormAdd:React.FC<typeCheck>=({send})=> {
             type="text"
             fullWidth
             variant="standard"
-            value={Items.DisplayName}
+            value={editingData.DisplayName}
             onChange={handleChange}
             error={errors.DisplayName}
             helperText={errors.DisplayName}
@@ -168,7 +126,7 @@ const FormAdd:React.FC<typeCheck>=({send})=> {
             type="number"
             fullWidth
             variant="standard"
-            value={Items.SellingPrice}
+            value={editingData.SellingPrice}
             onChange={handleChange}
             error={errors.SellingPrice}
             helperText={errors.SellingPrice}
@@ -181,7 +139,7 @@ const FormAdd:React.FC<typeCheck>=({send})=> {
             type="number"
             fullWidth
             variant="standard"
-            value={Items.BasePrice}
+            value={editingData.BasePrice}
             onChange={handleChange}
             error={errors.BasePrice}
             helperText={errors.BasePrice}
@@ -194,21 +152,21 @@ const FormAdd:React.FC<typeCheck>=({send})=> {
             type="text"
             fullWidth
             variant="standard"
-            value={Items.Decription}
+            value={editingData.Decription}
             onChange={handleChange}
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={()=>{navigate('/muilist');setItem({  Sku:'',
+        <Button onClick={()=>{navigate('/list');setEditData({  Sku:'',
         Name:"",
         DisplayName:"",
         SellingPrice:"",
         BasePrice:"",
         Decription:""})}}>Cancel</Button>
-          <Button onClick={()=>{handleItem(Items)}}>Send</Button>
+       <Button onClick={handleData}>Update</Button>
         </DialogActions>
       </Dialog>
     </div>
   );
 }
-export default FormAdd
+export default FormEdit;

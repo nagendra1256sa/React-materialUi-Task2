@@ -47,7 +47,7 @@ const DetailCard:React.FC<typeCheck>=({item})=> {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small" onClick={()=>navigate("/muilist")}>Back to list</Button>
+        <Button size="small" onClick={()=>navigate("/list")}>Back to list</Button>
       </CardActions>
     </Card>
     </div>

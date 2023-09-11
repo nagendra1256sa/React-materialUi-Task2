@@ -49,7 +49,7 @@ const TableRows: React.FC<TableRowProps> = ({ row, onEdit, onDelete, index, move
     onDelete(id);
   }
   const itemDetails = (Sku: number) => {
-    navigate(`/muilist/detailscard/${Sku}`);
+    navigate(`/list/detailscard/${Sku}`);
   }
   return (<><TableRow
     key={row.Sku}
@@ -58,15 +58,15 @@ const TableRows: React.FC<TableRowProps> = ({ row, onEdit, onDelete, index, move
     <TableCell component="th" scope="row">
       {row.Sku}
     </TableCell>
-    <TableCell align='left'>{row.Name}</TableCell>
+    <TableCell align='right'>{row.Name}</TableCell>
     <TableCell align="right">{row.SellingPrice}</TableCell>
     <TableCell align="right">
-      <IconButton onClick={(e) => { handleEdit(row); navigate("/muilist/edit"); e.stopPropagation(); }}>
+      <IconButton onClick={(e) => { handleEdit(row); navigate(`/list/edit/${row.id}`); e.stopPropagation(); }} color="primary">
         <Edit />
       </IconButton>
     </TableCell>
     <TableCell align="right">
-      <IconButton onClick={(e) => { deleteItem(row.id); e.stopPropagation(); }}>
+      <IconButton onClick={(e) => { deleteItem(row.id); e.stopPropagation(); }} color="error">
         <Delete />
       </IconButton>
     </TableCell>
@@ -74,6 +74,7 @@ const TableRows: React.FC<TableRowProps> = ({ row, onEdit, onDelete, index, move
 }
 
 const BasicTable: React.FC<typeCheck> = ({ rows, editing, deleteItem }) => {
+  
     const [data, setData] = useState(rows);
     const navigate = useNavigate();
     const handleEdit = (editedRow: Annotation) => {
@@ -84,23 +85,22 @@ const BasicTable: React.FC<typeCheck> = ({ rows, editing, deleteItem }) => {
       deleteItem(id);
     };
     const moveRow = (fromIndex: number, toIndex: number) => {
-      console.log(fromIndex);
       const updatedData = [...data];
       const [movedRow] = updatedData.splice(fromIndex, 1);
       updatedData.splice(toIndex, 0, movedRow);
       setData(updatedData);
     };
-    console.log(data);
     return (<div className='table-size'>
+      <h1 style={{textAlign:"center",marginTop:"60px"}}>Menu Items</h1>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 400 }} aria-label="simple table">
           <TableHead>
             <TableRow>
               <TableCell style={{ "fontWeight": "bold" }}>Sku</TableCell>
-              <TableCell align="left" style={{ "fontWeight": "bold" }}>Name</TableCell>
-              <TableCell align="left" style={{ "fontWeight": "bold" }}>Selling Price</TableCell>
-              <TableCell align="left" style={{ "fontWeight": "bold" }}>Edit action</TableCell>
-              <TableCell align="left" style={{ "fontWeight": "bold" }}>Delete action</TableCell>
+              <TableCell align="right" style={{ "fontWeight": "bold" }}>Name</TableCell>
+              <TableCell align="right" style={{ "fontWeight": "bold" }}>Selling Price</TableCell>
+              <TableCell align="right" style={{ "fontWeight": "bold" }}>Edit action</TableCell>
+              <TableCell align="right" style={{ "fontWeight": "bold" }}>Delete action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -117,7 +117,7 @@ const BasicTable: React.FC<typeCheck> = ({ rows, editing, deleteItem }) => {
         </Table>
       </TableContainer>
       <div className='styling'>
-        <Link to="/muilist/add">
+        <Link to="/list/add">
           <IconButton >
             <AddCircle style={{ fontSize: '62px', color: '#F5343e' }} />
           </IconButton>
