@@ -1,0 +1,22 @@
+{
+  "Users": [
+    {
+      "EmpId": "1",
+      "FirstName": "Pavan",
+      "LastName": "K",
+      "Email": "pavankalyankonidala@gmail.com",
+      "PhoneNumber": "7660053722",
+      "AlternativeNumber": "",
+      "id": 3
+    },
+    {
+      "EmpId": "2",
+      "FirstName": "shankar",
+      "LastName": "N",
+      "Email": "narayan@gmail.com",
+      "PhoneNumber": "8655754576",
+      "AlternativeNumber": "",
+      "id": 4
+    }
+  ]
+}

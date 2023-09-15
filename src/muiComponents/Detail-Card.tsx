@@ -12,7 +12,6 @@ interface typeCheck{
   item:Annotation[];
 }
 
-
 const DetailCard:React.FC<typeCheck>=({item})=> {
     const {id}=useParams();
     const itemId=id?parseInt(id):NaN;
@@ -47,7 +46,7 @@ const DetailCard:React.FC<typeCheck>=({item})=> {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small" onClick={()=>navigate("/list")}>Back to list</Button>
+        <Button size="small" onClick={()=>navigate("/main/list")}>Back to list</Button>
       </CardActions>
     </Card>
     </div>

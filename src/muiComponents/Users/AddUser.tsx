@@ -6,22 +6,22 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useNavigate } from 'react-router-dom';
-import { Annotation } from '../App';
+import { Users } from '../../App';
 
-interface typeCheck{
-    send:(data:Annotation)=>void;
+interface TypeCheck{
+    send:(data:Users)=>void;
 }
 
-const FormAdd:React.FC<typeCheck>=({send})=> {
+export const UserormAdd:React.FC<TypeCheck>=({send})=> {
     const navigate=useNavigate()
     const [errors,setErrors]=React.useState<any>({});
     const [Items,setItem]=React.useState({
-        Sku:'',
-        Name:"",
-        DisplayName:"",
-        SellingPrice:"",
-        BasePrice:"",
-        Decription:""
+        EmpId:'',
+        FirstName:"",
+        LastName:"",
+        Email:"",
+        PhoneNumber:"",
+        AlternativeNumber:""
     });
     
     const handleChange=(e:React.ChangeEvent<HTMLInputElement>)=>
@@ -31,30 +31,30 @@ const FormAdd:React.FC<typeCheck>=({send})=> {
     }
     const handleForm=()=>
     {
-       navigate("/main/list");
+       navigate("/main/user");
     }
     const validation=():boolean=>
     {
        const validActions:any={};
-       if(parseInt(Items.Sku)<=0)
+       if(parseInt(Items.EmpId)<=0)
        {
-          validActions.Sku="Invalid inputs"
+          validActions.EmpId="Invalid inputs"
        }
-       if(parseInt(Items.SellingPrice)<=0)
-       {
-          validActions.SellingPrice="Invalid inputs"
+       if(parseInt(Items.PhoneNumber)<=0)
+       {     
+          validActions.Email="Invalid inputs"
        }
-       if(parseInt(Items.BasePrice)<=0)
+       if(parseInt(Items.AlternativeNumber)<=0)
        {
-          validActions.BasePrice="Invalid inputs"
+          validActions.PhoneNumber="Invalid inputs"
        }
-       if(!isPatternValid(Items.Name))
+       if(!isPatternValid(Items.FirstName))
        {
-          validActions.Name="Invalid inputs"
+          validActions.FirstName="Invalid inputs"
        }
-       if(!isPatternValid(Items.DisplayName))
+       if(!isPatternValid(Items.LastName))
        {
-          validActions.DisplayName="Invalid inputs"
+          validActions.LastName="Invalid inputs"
        }
        if(Object.keys(validActions).length>0)
        {
@@ -66,25 +66,25 @@ const FormAdd:React.FC<typeCheck>=({send})=> {
     const validOf=():boolean=>
     {
        const newErrors:any={};
-       if(Items.Sku==="")
+       if(Items.EmpId==="")
        {
-         newErrors.Sku="Sku required";
+         newErrors.EmpId="EmpId required";
        }
-       if(Items.Name==="")
+       if(Items.FirstName==="")
        {
-         newErrors.Name="Name required";
+         newErrors.FirstName="FirstName required";
        }
-       if(Items.DisplayName==="")
+       if(Items.LastName==="")
        {
-         newErrors.DisplayName="Display name required";
+         newErrors.LastName="Last name required";
        }
-       if(Items.SellingPrice==="")
+       if(Items.PhoneNumber==="")
        {
-         newErrors.SellingPrice="Selling price required";
+         newErrors.PhoneNumber="Phone number required";
        }
-       if(Items.BasePrice==="")
+       if(Items.Email==="")
        {
-         newErrors.BasePrice="Base Price required";
+         newErrors.Email="Email required";
        }
        if(Object.keys(newErrors).length>0)
        {
@@ -99,13 +99,13 @@ const FormAdd:React.FC<typeCheck>=({send})=> {
        {
         if(validation())
         {send(Items);
-          setItem({  Sku:'',
-        Name:"",
-        DisplayName:"",
-        SellingPrice:"",
-        BasePrice:"",
-        Decription:""});
-        navigate('/main/list')}   
+          setItem({   EmpId:'',
+          FirstName:"",
+          LastName:"",
+          Email:"",
+          PhoneNumber:"",
+          AlternativeNumber:""});
+        navigate('/main/user')}   
        }
     }
     const isPatternValid=(name:string):boolean=>
@@ -120,91 +120,90 @@ const FormAdd:React.FC<typeCheck>=({send})=> {
         <DialogContent>
           <TextField
            autoFocus
-            name="Sku"
+            name="EmpId"
             margin="dense"
-            label="Sku"
+            label="EmpId"
             type="number"
             fullWidth
             variant="standard"
-            value={Items.Sku}
+            value={Items.EmpId}
             onChange={handleChange}
-            error={errors.Sku}
-            helperText={errors.Sku}
+            error={errors.EmpId}
+            helperText={errors.EmpId}
           />
           <TextField
-            name="Name"
+            name="FirstName"
             margin="dense"
-            label="Name"
+            label="FirstName"
             type="text"
             fullWidth
             variant="standard"
-            value={Items.Name}
+            value={Items.FirstName}
             onChange={handleChange}
-            error={errors.Name}
-            helperText={errors.Name}
+            error={errors.FirstName}
+            helperText={errors.FirstName}
           />
           <TextField
-            name="DisplayName"
+            name="LastName"
             autoFocus
             margin="dense"
-            label="Display name"
+            label="Last name"
             type="text"
             fullWidth
             variant="standard"
-            value={Items.DisplayName}
+            value={Items.LastName}
             onChange={handleChange}
-            error={errors.DisplayName}
-            helperText={errors.DisplayName}
+            error={errors.LastName}
+            helperText={errors.LastName}
           />
           <TextField
             autoFocus
-            name='SellingPrice'
+            name='Email'
             margin="dense"
-            label="Selling Price"
+            label="Email"
+            type="text"
+            fullWidth
+            variant="standard"
+            value={Items.Email}
+            onChange={handleChange}
+            error={errors.Email}
+            helperText={errors.Email}
+          />
+          <TextField
+            autoFocus
+            name="PhoneNumber"
+            margin="dense"
+            label="PhoneNumber"
             type="number"
             fullWidth
             variant="standard"
-            value={Items.SellingPrice}
+            value={Items.PhoneNumber}
             onChange={handleChange}
-            error={errors.SellingPrice}
-            helperText={errors.SellingPrice}
+            error={errors.PhoneNumber}
+            helperText={errors.PhoneNumber}
           />
           <TextField
             autoFocus
-            name="BasePrice"
+            name="AlternativeNumber"
             margin="dense"
-            label="Base Price"
-            type="number"
-            fullWidth
-            variant="standard"
-            value={Items.BasePrice}
-            onChange={handleChange}
-            error={errors.BasePrice}
-            helperText={errors.BasePrice}
-          />
-          <TextField
-            autoFocus
-            name="Decription"
-            margin="dense"
-            label="Decription"
+            label="AlternativeNumber"
             type="text"
             fullWidth
             variant="standard"
-            value={Items.Decription}
+            value={Items.AlternativeNumber}
             onChange={handleChange}
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={()=>{navigate('/main/list');setItem({  Sku:'',
-        Name:"",
-        DisplayName:"",
-        SellingPrice:"",
-        BasePrice:"",
-        Decription:""})}}>Cancel</Button>
+          <Button onClick={()=>{navigate('/main/user');setItem({   EmpId:'',
+        FirstName:"",
+        LastName:"",
+        Email:"",
+        PhoneNumber:"",
+        AlternativeNumber:""})}}>Cancel</Button>
           <Button onClick={()=>{handleItem(Items)}}>Send</Button>
         </DialogActions>
       </Dialog>
     </div>
   );
 }
-export default FormAdd

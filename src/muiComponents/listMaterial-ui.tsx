@@ -5,13 +5,14 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { AddCircle, Delete, Edit } from '@mui/icons-material';
-import { Link, NavigateFunction, Outlet, useNavigate } from 'react-router-dom';
+import { Delete, Edit } from '@mui/icons-material';
+import {  NavigateFunction, Outlet, useNavigate } from 'react-router-dom';
 import { IconButton } from '@mui/material';
 import React, { useState } from 'react';
 import { Annotation } from '../App';
 import '../App.css'
 import { useDrag, useDrop } from 'react-dnd';
+import AddButton from './AddButton';
 
 interface typeCheck {
   rows: Annotation[];
@@ -48,8 +49,8 @@ const TableRows: React.FC<TableRowProps> = ({ row, onEdit, onDelete, index, move
   const deleteItem = (id: number) => {
     onDelete(id);
   }
-  const itemDetails = (Sku: number) => {
-    navigate(`/list/detailscard/${Sku}`);
+  const itemDetails = (id: number) => {
+    navigate(`/main/list/detailscard/${id}`);
   }
   return (<><TableRow
     key={row.Sku}
@@ -61,7 +62,7 @@ const TableRows: React.FC<TableRowProps> = ({ row, onEdit, onDelete, index, move
     <TableCell align='right'>{row.Name}</TableCell>
     <TableCell align="right">{row.SellingPrice}</TableCell>
     <TableCell align="right">
-      <IconButton onClick={(e) => { handleEdit(row); navigate(`/list/edit/${row.id}`); e.stopPropagation(); }} color="primary">
+      <IconButton onClick={(e) => { handleEdit(row); navigate(`/main/list/edit/${row.id}`); e.stopPropagation(); }} color="primary">
         <Edit />
       </IconButton>
     </TableCell>
@@ -116,13 +117,7 @@ const BasicTable: React.FC<typeCheck> = ({ rows, editing, deleteItem }) => {
           </TableBody>
         </Table>
       </TableContainer>
-      <div className='styling'>
-        <Link to="/list/add">
-          <IconButton >
-            <AddCircle style={{ fontSize: '62px', color: '#F5343e' }} />
-          </IconButton>
-        </Link>
-      </div>
+      <AddButton/>
       <Outlet />
     </div>
     );

@@ -35,7 +35,7 @@ const Login = () => {
         {
           const user=login.Username
            data?.login(user)
-           navigate("/")
+           navigate("/main")
         }
         setError(true)
      }

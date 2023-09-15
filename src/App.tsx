@@ -7,9 +7,13 @@ import BasicTable from './muiComponents/listMaterial-ui';
 import Login from './muiComponents/login';
 import FormEdit from './muiComponents/Mui-Edit';
 import FormAdd from './muiComponents/Mui-Add';
-import { deleteDetails, getData, post, putData } from './muiComponents/Storage';
-import Drawer from './muiComponents/Drawer';
+import { deleteDetails, deleteUserDetails, getData, getUserData, post, postUserData, putData, putUserData } from './muiComponents/Storage';
 import AuthProvider from './muiComponents/Auth';
+import DrawerList from './muiComponents/Drawer';
+import UserTable from './muiComponents/Users/Users';
+import UserFormEdit from './muiComponents/Users/EditUser';
+import UserDetails from './muiComponents/Users/UserDetails';
+import UserFormAdd from './muiComponents/Users/FormValidation';
 
 
 export interface Annotation
@@ -22,15 +26,20 @@ export interface Annotation
   SellingPrice:string;
   Decription:string
 }
-export interface Row{
-   id:number;
-   Name:string;
-   Sku:number;
-   SellingPrice:number;
+export interface Users{
+    id:number;
+    EmpId:number
+    FirstName:string;
+    LastName:string;
+    Email:string;
+    PhoneNumber:number;
+    AlternativeNumber:number;
  }
 const App:React.FC=()=>
 {
  const[state,setState]=useState<Annotation[]>();
+ const[users,setUsers]=useState<Users[]>();
+ const [open, setOpen] = React.useState(false);
  const navigate=useNavigate();
  const[edit,setEdit]=useState({
   Sku:"",
@@ -43,6 +52,7 @@ const App:React.FC=()=>
  useEffect(()=>
  {
    getDetails();
+   getUserDetails();
  },[])
  const getDetails=async()=>
  {
@@ -51,7 +61,6 @@ const App:React.FC=()=>
  }
  const postData=async(data:Annotation)=>
  {
-   console.log(data);
     await post(data);
     getDetails();
     navigate("/list")
@@ -69,7 +78,7 @@ const App:React.FC=()=>
  {
     await putData(data,data.id);
     getDetails();
-    navigate("/list");
+    navigate("/main/list");
  }
  const ProtectedRoute=({element,...rest}:{element:React.ReactElement})=>
  {
@@ -78,29 +87,58 @@ const App:React.FC=()=>
      {
         if(loginData===null)
         {
-          navigate("/login")
+          navigate("/")
         }
-     },[loginData]
-    )
+     },[loginData])
     if(loginData===null)
     {
       return null;
     }
     return React.cloneElement(element, rest);
  }
+ const getUserDetails=async()=>
+ {
+   const responce=await getUserData();
+   setUsers(responce.data);
+ }
+ const postUserDetails=async(data:Users)=>
+ {
+    await postUserData(data);
+    getUserDetails();
+    navigate("/main/user");
+ }
+ const putDetails=async(data:any)=>
+ {
+  console.log(data.id);
+  
+   await putUserData(data,data.id);
+   getUserDetails();
+ }
+ const deleteUserData=async(id:number)=>
+ {
+    await deleteUserDetails(id);
+    getUserDetails();
+ }
   return (
     <section>
       <AuthProvider>
      <Routes>
-      <Route path="/login" element={<Login/>}/>
-      <Route path="/" element={<Drawer/>}>
-      <Route path="/list" element={state ? (
+      <Route path="/" element={<Login/>}/>
+      <Route path="/main" element={<DrawerList/>}>
+      <Route path="/main/list" element={state ? (
       <ProtectedRoute element={<DndProvider backend={HTML5Backend}><BasicTable rows={state} deleteItem={deleteData} editing={handleData} /></DndProvider>} />
        ) : null} >
-      <Route path="/list/add" element={<FormAdd send={postData}/>}/>
-      <Route path="/list/edit/:id" element={<FormEdit update={updateData} editData={edit}/>}/>
-      <Route path="/list/detailscard/:id" element={state?<DetailCard item={state}/>:null}/>
+      <Route path="/main/list/add" element={<FormAdd send={postData}/>}/>
+      <Route path="/main/list/edit/:id" element={<FormEdit update={updateData} editData={edit}/>}/>
+      <Route path="/main/list/detailscard/:id" element={state?<DetailCard item={state}/>:null}/>
       </Route> 
+      <Route path="/main/user" element={users ? (
+      <ProtectedRoute element={<DndProvider backend={HTML5Backend}><UserTable users={users} deleteItem={deleteUserData}  setOpen={setOpen}/></DndProvider>} />
+       ) : null}>
+        <Route path="/main/user/add"  element={<UserFormAdd send={postUserDetails}/>}/>
+        <Route path="/main/user/edit/:id" element={users?<UserFormEdit state={users} put={putDetails}/>:null}/>
+        <Route path="/main/user/details/:id" element={users?<UserDetails  state={users} open={open} setOpen={setOpen}/>:null}/>
+      </Route>
       </Route>
       </Routes>
       </AuthProvider>

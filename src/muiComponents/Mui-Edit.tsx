@@ -34,7 +34,7 @@ const FormEdit:React.FC<typeCheck>=({update,editData})=> {
     }
     const handleForm=()=>
     {
-      navigate("/list");
+      navigate("/main/list");
     }
     const validOf=():boolean=>
     {
@@ -157,7 +157,7 @@ const FormEdit:React.FC<typeCheck>=({update,editData})=> {
           />
         </DialogContent>
         <DialogActions>
-        <Button onClick={()=>{navigate('/list');setEditData({  Sku:'',
+        <Button onClick={()=>{navigate('/main/list');setEditData({  Sku:'',
         Name:"",
         DisplayName:"",
         SellingPrice:"",
